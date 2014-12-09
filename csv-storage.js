@@ -1,12 +1,12 @@
 CsvStorage = (function() {
   var fs = Npm.require('fs');
-  function _private() {
+  var _private = {
 
   };
   _private.getPath = function(path) {
     var base = process.env.PWD;
     path = base + path;
-    
+
     return path;
   };
   _private.readData = function(path) {
@@ -25,10 +25,10 @@ CsvStorage = (function() {
     var strLines = data.trim().split("\n");
     var lines = [];
     var i = 0;
-    for(var line = lines[i]; i < lines.length; i++, line = lines[i]) {
+    for(var line = strLines[i]; i < strLines.length; i++, line = strLines[i]) {
       lines.push(line.trim().split(","));
     }
-    return lines; 
+    return lines;
   };
   _private.readLines = function(data) {
     if(data && data.length) {
@@ -41,13 +41,15 @@ CsvStorage = (function() {
     path = _private.getPath(path);
     var stream = fs.createWriteStream(path);
     stream.once('open', function(fd) {
-      stream.write("My first row\n");
-      stream.write("My second row\n");
+      var i = 0;
+      for(var line = lines[i]; i < lines.length; i++, line = lines[i]) {
+        steam.write(line.toString());
+      }
       stream.end();
     });
   };
 
-  function CsvStorage() {
+  var CsvStorage = {
 
   };
   /*
@@ -55,7 +57,7 @@ CsvStorage = (function() {
   *   line1: [value1, value2, value3, ..., ... ]
   * ]
   */
-  CsvStorage.prototype.read = function(path) {
+  CsvStorage.read = function(path) {
     if(!path) {
       throw new Error("Please, enter correct path. It doesn't exists or undefined.");
     }
@@ -63,16 +65,16 @@ CsvStorage = (function() {
     return _private.readLines(data);
   };
   /**
-   * @param {string} path - Path to your file.
+   * @param {string} path - Path to your file. start from '/', '/config/example.csv'
    * @param array lines - [line1, line2, ..., ... ].
    * line1: [value1, value2, value3, ..., ... ]
    */
-  CsvStorage.prototype.write = function(path, lines) {
+  CsvStorage.write = function(path, lines) {
     if(!path) {
       throw new Error("Please, enter correct path. It doesn't exists or undefined.");
     }
-    // write to file
+    _private.writeLines(path, lines);
   };
 
-  return CSV;
+  return CsvStorage;
 })();
