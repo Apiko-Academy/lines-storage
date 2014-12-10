@@ -1,4 +1,4 @@
-CsvStorage = (function() {
+LinesStorage = (function() {
   var fs = Npm.require('fs');
   var _private = {
 
@@ -32,7 +32,7 @@ CsvStorage = (function() {
   };
   _private.readLines = function(data) {
     if(data && data.length) {
-      return _private.createLines(data);
+      return data.split("\n");
     } else {
       return [];
     }
@@ -43,7 +43,7 @@ CsvStorage = (function() {
     stream.once('open', function(fd) {
       var i = 0;
       for(var line = lines[i]; i < lines.length; i++, line = lines[i]) {
-        steam.write(line.toString());
+        steam.write(line + "\n");
       }
       stream.end();
     });
@@ -54,10 +54,11 @@ CsvStorage = (function() {
   };
   /*
   * Returned lines [
-  *   line1: [value1, value2, value3, ..., ... ]
+  *   line1: "value1, value2",
+  *   line1: "value1, value2"
   * ]
   */
-  CsvStorage.read = function(path) {
+  LinesStorage.read = function(path) {
     if(!path) {
       throw new Error("Please, enter correct path. It doesn't exists or undefined.");
     }
@@ -67,14 +68,14 @@ CsvStorage = (function() {
   /**
    * @param {string} path - Path to your file. start from '/', '/config/example.csv'
    * @param array lines - [line1, line2, ..., ... ].
-   * line1: [value1, value2, value3, ..., ... ]
+   * line1: "value1, valu2, value3"
    */
-  CsvStorage.write = function(path, lines) {
+  LinesStorage.write = function(path, lines) {
     if(!path) {
       throw new Error("Please, enter correct path. It doesn't exists or undefined.");
     }
     _private.writeLines(path, lines);
   };
 
-  return CsvStorage;
+  return LinesStorage;
 })();

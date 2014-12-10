@@ -1,7 +1,8 @@
 Package.describe({
-  name: 'csv-storage',
-  summary: 'Read and write csv files',
-  version: '0.0.1'
+  name: 'lines-storage',
+  summary: 'Read and write string lines',
+  version: '0.0.1',
+  git: 'https://github.com/JSSolutions/lines-storage.git'
 });
 
 Package.onUse(function(api) {
