@@ -7,6 +7,6 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.0');
-  api.addFiles('csv-storage.js');
-  api.export('CsvStorage', 'server');
+  api.addFiles('lines-storage.js');
+  api.export('LinesStorage', 'server');
 });
