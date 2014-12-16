@@ -43,13 +43,23 @@ LinesStorage = (function() {
     stream.once('open', function(fd) {
       var i = 0;
       for(var line = lines[i]; i < lines.length; i++, line = lines[i]) {
-        steam.write(line + "\n");
+        stream.write(line + "\n");
       }
       stream.end();
     });
   };
+  _private.writeData = function(path, data) {
+    path = _private.getPath(path);
+    var stream = fs.createWriteStream(path);
+    stream.once('open', function(fd) {
+      console.log('Hello from here ', data);
+      stream.write(data);
+      stream.end();
+    });
+  };
 
-  var CsvStorage = {
+
+  var LinesStorage = {
 
   };
   /*
@@ -63,18 +73,24 @@ LinesStorage = (function() {
       throw new Error("Please, enter correct path. It doesn't exists or undefined.");
     }
     var data = _private.readData(path);
-    return _private.readLines(data);
+    return data;
   };
   /**
    * @param {string} path - Path to your file. start from '/', '/config/example.csv'
    * @param array lines - [line1, line2, ..., ... ].
    * line1: "value1, valu2, value3"
    */
-  LinesStorage.write = function(path, lines) {
+  LinesStorage.writeLines = function(path, lines) {
     if(!path) {
       throw new Error("Please, enter correct path. It doesn't exists or undefined.");
     }
     _private.writeLines(path, lines);
+  };
+  LinesStorage.write = function(path, data) {
+    if(!path) {
+      throw new Error("Please, enter correct path. It doesn't exists or undefined.");
+    }
+    _private.writeData(path, data);
   };
 
   return LinesStorage;
