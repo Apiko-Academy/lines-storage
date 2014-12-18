@@ -1,5 +1,6 @@
 LinesStorage = (function() {
   var fs = Npm.require('fs');
+  var i = 1;
   var _private = {
 
   };
@@ -48,15 +49,20 @@ LinesStorage = (function() {
       stream.end();
     });
   };
+  _private.writeDataAppend = function(path, data) {
+    path = _private.getPath(path);
+    fs.open(path, 'a', 0666, function(err, fd) {
+      fs.writeSync(fd, data);
+    });
+  };
   _private.writeData = function(path, data) {
     path = _private.getPath(path);
     var stream = fs.createWriteStream(path);
     stream.once('open', function(fd) {
-      console.log('Hello from here ', data);
       stream.write(data);
       stream.end();
     });
-  };
+  }
 
 
   var LinesStorage = {
@@ -91,6 +97,10 @@ LinesStorage = (function() {
       throw new Error("Please, enter correct path. It doesn't exists or undefined.");
     }
     _private.writeData(path, data);
+  };
+  LinesStorage.isExist = function(path) {
+    path = _private.getPath(path);
+    return fs.existsSync(path);
   };
 
   return LinesStorage;
